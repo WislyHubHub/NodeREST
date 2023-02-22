@@ -42,6 +42,18 @@ app.get('/books/:id' , (req ,res) => {
 
 });
 
+app.post('/books' ,(req ,res) => {
+    const book = req.body;
+    db.run ('INSERT INTO books (title , author) VALUES (?,?)' ,book.title ,book.author ,function(err){
+        if (err) {
+            res.status(500).send(err);
+        }else {
+            book.id = this.lastID;
+            res.send(book);
+        }
+    });
+});
+
 app.put ('/books/:id' ,(req ,res) => {
     const book = req.body ;
     db.run('UPDATE books SET title = ?, author = ? WHERE id = ? ' ,book.title ,book.author ,req.params.id ,function(err) {
